@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'io.ratpack.ratpack-java' version '1.7.2'
+}
+
+group 'com.echsylon.example'
+version '0.0.1'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+mainClassName = 'com.echsylon.example.Application'
+
+repositories {
+    jcenter()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.radixdlt:radixdlt-java:rc~1.0-beta.5-SNAPSHOT'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+    implementation 'org.slf4j:slf4j-simple:1.7.26'
+    implementation 'io.ratpack:ratpack-rx2:1.7.2'
+}
+
+task unpackWebApp(type: Sync) {
+    from configurations.default
+            .findAll { it.name == 'webapp.zip' }
+            .collect { zipTree(it) }
+    into "${projectDir}/www"
+}
+
+run.dependsOn(unpackWebApp)
